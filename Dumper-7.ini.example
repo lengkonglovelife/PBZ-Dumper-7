@@ -1,0 +1,9 @@
+; Optional settings. The export directory matches upstream's default.
+; Copy to Dumper-7.ini next to the host executable, or to C:/Dumper-7.
+[Settings]
+SDKNamespaceName=PBZ
+SDKGenerationPath=C:/Dumper-7
+LogFilePath=
+SleepTimeout=10
+ShouldAutoUnload=1
+ExecuteSDKTestScript=0
