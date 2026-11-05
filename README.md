@@ -9,6 +9,8 @@ The PBZ changes cover object/container layouts, executable-section scanning, sta
 
 The default SDK export root is **`C:\Dumper-7`**, matching upstream. Game/version subdirectories are created below that root. Without `LogFilePath`, output stays in the console. Existing per-game or global INI files can override these defaults.
 
+Injection opens a `Dumper-7 - PBZ` console window. Press **F6** after generation to unload the dumper. With `ShouldAutoUnload=1`, the dumper unloads and its console closes automatically when generation finishes. The optional example configuration enables this automatic unload.
+
 Build the DLL with Visual Studio C++ Build Tools and CMake:
 
 ```powershell
@@ -35,15 +37,6 @@ SDK Generator for all Unreal Engine games. Supported versions are all of UE4 and
 - Inject the dll into your target game
 - The SDK is generated into the path specified by `Settings::SDKGenerationPath`, by default this is `C:\\Dumper-7`
 - **See [UsingTheSDK](UsingTheSDK.md) for a guide to get started, or to migrate from an old SDK.**
-## Support Me
-
-KoFi: https://ko-fi.com/fischsalat \
-Patreon: https://www.patreon.com/u119629245
-
-LTC (LTC-network): `LLtXWxDbc5H9d96VJF36ZpwVX6DkYGpTJU` \
-BTC (Bitcoin): `1DVDUMcotWzEG1tyd1FffyrYeu4YEh7spx` \
-USDT (Tron (TRC20)): `TWHDoUr2H52Gb2WYdZe7z1Ct316gMg64ps`
-
 ## Overriding Offsets
 
 - ### Only override any offsets if the generator doesn't find them, or if they are incorrect

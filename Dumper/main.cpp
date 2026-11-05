@@ -2,6 +2,7 @@
 #include <iostream>
 #include <chrono>
 #include <fstream>
+#include <cstdio>
 
 #include "Generators/CppGenerator.h"
 #include "Generators/MappingGenerator.h"
@@ -94,12 +95,33 @@ static DWORD GenerateGuarded()
 	__except (ReportDumpException(GetExceptionInformation())) { return ERROR_INVALID_ADDRESS; }
 }
 
+static bool InitializeDumperConsole()
+{
+	const bool CreatedConsole = AllocConsole() != FALSE;
+	if (!CreatedConsole && GetLastError() != ERROR_ACCESS_DENIED)
+	{
+		OutputDebugStringA("Dumper-7: console allocation failed.\n");
+		return false;
+	}
+
+	FILE* ConsoleStream = nullptr;
+	freopen_s(&ConsoleStream, "CONIN$", "r", stdin);
+	freopen_s(&ConsoleStream, "CONOUT$", "w", stdout);
+	freopen_s(&ConsoleStream, "CONOUT$", "w", stderr);
+	std::cout.clear();
+	std::cerr.clear();
+	if (CreatedConsole)
+		SetConsoleTitleW(L"Dumper-7 - PBZ");
+	return CreatedConsole;
+}
+
 DWORD MainThread(HMODULE Module)
 {
+	const bool OwnsConsole = InitializeDumperConsole();
 	std::cerr.clear();
 	std::cerr << std::boolalpha << std::hex;
-	Settings::Config::Load();
 	std::cerr << "Initializing [Dumper-7] PBZ update 20261104\n";
+	Settings::Config::Load();
 	Settings::Config::DelayDumperStart();
 	const DWORD Result = GenerateGuarded();
 
@@ -112,6 +134,9 @@ DWORD MainThread(HMODULE Module)
 			std::cerr << "\nUnloaded [Dumper-7]\n";
 
 			Settings::Config::CloseLog();
+			std::cerr.flush();
+			if (OwnsConsole)
+				FreeConsole();
 			FreeLibraryAndExitThread(Module, Result);
 		}
 
